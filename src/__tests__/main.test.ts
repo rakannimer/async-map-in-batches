@@ -24,6 +24,7 @@ const testFromInput = async ({
     .mockImplementation((batchNumber: number, batchCount: number) => {
       onBatchCallCount++;
     });
+
   const output = await asyncMapInBatches(
     inputArray,
     asyncMapIterator,
