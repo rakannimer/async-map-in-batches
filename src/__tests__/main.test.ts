@@ -18,6 +18,7 @@ const testFromInput = async ({
     await delay(el);
     return `${el}_${i}`;
   });
+  //
   const onBatch = jest
     .fn()
     .mockImplementation((batchNumber: number, batchCount: number) => {
