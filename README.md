@@ -43,6 +43,7 @@ const outputArray = await asyncMapInBatches(inputArray, async i => {
 - asyncIterator: async (val:any, i:number) => V (required)
 - batchSize: number (optional)
 - onBatch: (batchNumber:number, batchCount: number) => void
+  Called once per promise batch
 
 ### Output
 
