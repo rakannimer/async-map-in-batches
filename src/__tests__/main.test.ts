@@ -38,9 +38,9 @@ const testFromInput = async ({
   }
 };
 
-describe("asyncMapInChunks", () => {
+describe("asyncMapInBatches", () => {
   test("exports", () => {
-    expect(asyncMapInChunks).toBeTruthy();
+    expect(asyncMapInBatches).toBeTruthy();
   });
   test("works 1", async () => {
     const INPUT_SIZE = 50;
