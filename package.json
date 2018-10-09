@@ -42,6 +42,11 @@
     "preset": "ts-jest",
     "collectCoverageFrom": [
       "src/*.{ts,tsx}"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/build/",
+      "/dist/"
     ]
   },
   "description": "Map an array to another with batched async operations."
