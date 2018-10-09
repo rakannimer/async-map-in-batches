@@ -1,4 +1,4 @@
-import { asyncMapInChunks } from "../index";
+import asyncMapInBatches from "../index";
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -23,7 +23,7 @@ const testFromInput = async ({
     .mockImplementation((batchNumber: number, batchCount: number) => {
       onBatchCallCount++;
     });
-  const output = await asyncMapInChunks(
+  const output = await asyncMapInBatches(
     inputArray,
     asyncMapIterator,
     BATCH_SIZE,

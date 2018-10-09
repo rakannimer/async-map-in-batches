@@ -1,7 +1,7 @@
 type AsyncMapIterator<T, V> = (v: T, i: number) => Promise<V>;
 
 // asyncMapInBatches
-export async function asyncMapInChunks<T, V>(
+async function asyncMapInChunks<T, V>(
   array: Array<T>,
   asyncMap: AsyncMapIterator<T, V>,
   batchSize: number = 20,
@@ -29,3 +29,4 @@ export async function asyncMapInChunks<T, V>(
   }
   return result;
 }
+export default asyncMapInChunks;
