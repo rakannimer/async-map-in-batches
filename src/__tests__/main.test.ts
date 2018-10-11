@@ -8,15 +8,15 @@ const testFromInput = async ({
   testBatch = true
 }: any) => {
   const inputArray = Array.from({ length: INPUT_SIZE }, (v, i) => {
-    return i * 1;
+    return `${i}`;
   });
-  const expectedOutput = inputArray.map((el, i) => `${el}_${i}`);
+  const expectedOutput = inputArray;
   let callCount = 0;
   let onBatchCallCount = 0;
-  const asyncMapIterator = jest.fn().mockImplementation(async (el, i) => {
+  const asyncMapIterator = jest.fn().mockImplementation(async i => {
     callCount++;
-    await delay(el);
-    return `${el}_${i}`;
+    await delay(i);
+    return `${i}`;
   });
   //
   const onBatch = jest
@@ -26,7 +26,7 @@ const testFromInput = async ({
     });
 
   const output = await asyncMapInBatches(
-    inputArray,
+    INPUT_SIZE,
     asyncMapIterator,
     BATCH_SIZE,
     testBatch ? onBatch : undefined

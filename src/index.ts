@@ -1,13 +1,12 @@
-type AsyncMapIterator<T, V> = (v: T, i: number) => Promise<V>;
+type AsyncMapIterator<V> = (i: number) => Promise<V>;
 
 // asyncMapInBatches
-async function asyncMapInChunks<T, V>(
-  array: Array<T>,
-  asyncMap: AsyncMapIterator<T, V>,
+async function asyncMapInChunks<V>(
+  operationCount: number,
+  asyncMap: AsyncMapIterator<V>,
   batchSize: number = 20,
   onBatch: (batchNumber: number, batchCount: number) => void = () => {}
 ): Promise<Array<V>> {
-  const operationCount = array.length;
   const batchCount = Math.ceil(operationCount / batchSize);
   let result = [] as Array<V>;
   for (let i = 0; i < batchCount; i += 1) {
@@ -18,9 +17,7 @@ async function asyncMapInChunks<T, V>(
       if (operationIndex >= operationCount) {
         break;
       }
-      currentBatchOperations.push(
-        asyncMap(array[operationIndex], operationIndex)
-      );
+      currentBatchOperations.push(asyncMap(operationIndex));
     }
     const currentBatchOperationsResults = await Promise.all(
       currentBatchOperations
