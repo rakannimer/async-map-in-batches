@@ -11,7 +11,6 @@ async function asyncMapInChunks<V>(
   let result = [] as Array<V>;
   for (let i = 0; i < batchCount; i += 1) {
     const currentBatchOperations = [];
-    onBatch(i, batchCount);
     for (let j = 0; j < batchSize; j += 1) {
       const operationIndex = i * batchSize + j;
       if (operationIndex >= operationCount) {
@@ -22,6 +21,7 @@ async function asyncMapInChunks<V>(
     const currentBatchOperationsResults = await Promise.all(
       currentBatchOperations
     );
+    await onBatch(i, batchCount);
     result = result.concat(currentBatchOperationsResults);
   }
   return result;
