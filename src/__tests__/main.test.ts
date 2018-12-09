@@ -67,6 +67,9 @@ const testAsyncOnBatchFromInput = async ({ INPUT_SIZE, BATCH_SIZE }: any) => {
   );
   expect(output).toEqual(expectedOutput);
   expect(callCount).toEqual(INPUT_SIZE);
+  expect(onBatchCallCount).toEqual(
+    Math.ceil(INPUT_SIZE / (BATCH_SIZE ? BATCH_SIZE : 20))
+  );
 };
 
 describe("asyncMapInBatches", () => {
@@ -93,6 +96,13 @@ describe("asyncMapInBatches", () => {
   });
   test("works with async onBatch", async () => {
     const INPUT_SIZE = 51;
+    await testAsyncOnBatchFromInput({
+      INPUT_SIZE,
+      BATCH_SIZE: 10
+    });
+  });
+  test("works with async onBatch on edge case", async () => {
+    const INPUT_SIZE = 50;
     await testAsyncOnBatchFromInput({
       INPUT_SIZE,
       BATCH_SIZE: 10
