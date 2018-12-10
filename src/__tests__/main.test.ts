@@ -40,6 +40,38 @@ const testFromInput = async ({
   }
 };
 
+const testAsyncOnBatchFromInput = async ({ INPUT_SIZE, BATCH_SIZE }: any) => {
+  const inputArray = Array.from({ length: INPUT_SIZE }, (v, i) => {
+    return `${i}`;
+  });
+  const expectedOutput = inputArray;
+  let callCount = 0;
+  let onBatchCallCount = 0;
+  const asyncMapIterator = jest.fn().mockImplementation(async i => {
+    callCount++;
+    await delay(i);
+    return `${i}`;
+  });
+  const onBatch = jest
+    .fn()
+    .mockImplementation(async (batchNumber: number, batchCount: number) => {
+      await delay(batchCount);
+      onBatchCallCount++;
+    });
+
+  const output = await asyncMapInBatches(
+    INPUT_SIZE,
+    asyncMapIterator,
+    BATCH_SIZE,
+    onBatch
+  );
+  expect(output).toEqual(expectedOutput);
+  expect(callCount).toEqual(INPUT_SIZE);
+  expect(onBatchCallCount).toEqual(
+    Math.ceil(INPUT_SIZE / (BATCH_SIZE ? BATCH_SIZE : 20))
+  );
+};
+
 describe("asyncMapInBatches", () => {
   test("exports", () => {
     expect(asyncMapInBatches).toBeTruthy();
@@ -61,5 +93,19 @@ describe("asyncMapInBatches", () => {
   test("works without onBatch", async () => {
     const INPUT_SIZE = 51;
     await testFromInput({ INPUT_SIZE, BATCH_SIZE: 10, testBatch: false });
+  });
+  test("works with async onBatch", async () => {
+    const INPUT_SIZE = 51;
+    await testAsyncOnBatchFromInput({
+      INPUT_SIZE,
+      BATCH_SIZE: 10
+    });
+  });
+  test("works with async onBatch on edge case", async () => {
+    const INPUT_SIZE = 50;
+    await testAsyncOnBatchFromInput({
+      INPUT_SIZE,
+      BATCH_SIZE: 10
+    });
   });
 });
